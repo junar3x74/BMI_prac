@@ -32,14 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
             if (heightStr.isEmpty() || weightStr.isEmpty()) {
                 showToast("Please fill in both fields.");
-                return; // Stop further execution
+                return;
             }
 
             try {
                 double height = Double.parseDouble(heightStr);
                 double weight = Double.parseDouble(weightStr);
 
-                // Ensure height is in meters
+
                 if (height > 10) {
                     showToast("Height seems too large. Use meters, e.g., 1.75.");
                     return;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
                 double bmi = weight / (height * height);
 
-                // Build the result string
+
                 StringBuilder result = new StringBuilder("Your BMI is " + String.format("%.2f", bmi) + "\n");
 
                 if (bmi < 16.0) {
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             resultsBmi.setText("");
         });
 
-        // Apply window insets for proper padding
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
