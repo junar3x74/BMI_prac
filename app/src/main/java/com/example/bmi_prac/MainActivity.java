@@ -20,73 +20,70 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        EditText bmi_height = findViewById(R.id.height);
-        EditText bmi_weight = findViewById(R.id.weight);
-        Button calculate_results = findViewById(R.id.calculate_button);
-        Button erase_button = findViewById(R.id.erase);
-        TextView results_bmi = findViewById(R.id.results);
+        EditText bmiHeight = findViewById(R.id.height);
+        EditText bmiWeight = findViewById(R.id.weight);
+        Button calculateResults = findViewById(R.id.calculate_button);
+        Button eraseButton = findViewById(R.id.erase);
+        TextView resultsBmi = findViewById(R.id.results);
 
+        calculateResults.setOnClickListener(v -> {
+            String heightStr = bmiHeight.getText().toString().trim();
+            String weightStr = bmiWeight.getText().toString().trim();
 
-        calculate_results.setOnClickListener(v ->{
-            String height = bmi_height.getText().toString();
-            String weight = bmi_weight.getText().toString();
-
-            if(height.isEmpty() || weight.isEmpty()){
-                showtoast("Enter fields");
+            if (heightStr.isEmpty() || weightStr.isEmpty()) {
+                showToast("Please fill in both fields.");
+                return; // Stop further execution
             }
 
+            try {
+                double height = Double.parseDouble(heightStr);
+                double weight = Double.parseDouble(weightStr);
 
+                // Ensure height is in meters
+                if (height > 10) {
+                    showToast("Height seems too large. Use meters, e.g., 1.75.");
+                    return;
+                }
 
+                double bmi = weight / (height * height);
 
+                // Build the result string
+                StringBuilder result = new StringBuilder("Your BMI is " + String.format("%.2f", bmi) + "\n");
 
+                if (bmi < 16.0) {
+                    result.append("You are severely malnourished.");
+                } else if (bmi < 18.5) {
+                    result.append("You are underweight.");
+                } else if (bmi < 24.9) {
+                    result.append("You have a normal weight.");
+                } else if (bmi < 29.9) {
+                    result.append("You are overweight.");
+                } else {
+                    result.append("You are obese.");
+                }
 
-            double h = Double.parseDouble(height);
-            double w = Double.parseDouble(weight);
+                resultsBmi.setText(result.toString());
 
-            double bmi = w / (h * h);
-
-            String result = "Your Bmi is " + String.format("%.2f" , bmi) + "\n";
-            if(bmi <18.8){
-                
-                result += "you are underweight";
-            } else if (bmi <17.0) {
-                result+= "you are malnourished";
-                
-            } else if (bmi <24.9) {
-                result+= "you have a normal weight";
-            } else if (bmi <29.9) {
-                result+= "you are overweight";
-            }else {
-                result+="you are obese";
+            } catch (NumberFormatException e) {
+                showToast("Invalid input. Please enter numeric values.");
             }
-
-            results_bmi.setText(result);
-
         });
 
-        erase_button.setOnClickListener(v -> {
-                bmi_height.setText("");
-                bmi_weight.setText("");
-            results_bmi.setText("");
+        eraseButton.setOnClickListener(v -> {
+            bmiHeight.setText("");
+            bmiWeight.setText("");
+            resultsBmi.setText("");
         });
 
-
-
-
-
-
+        // Apply window insets for proper padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
     }
-    private void showtoast(String message){
+
+    private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
     }
-
-
 }
