@@ -22,10 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         EditText bmi_height = findViewById(R.id.height);
         EditText bmi_weight = findViewById(R.id.weight);
-        Button caculate_results = findViewById(R.id.calculate_button);
+        Button calculate_results = findViewById(R.id.calculate_button);
+        Button erase_button = findViewById(R.id.erase);
         TextView results_bmi = findViewById(R.id.results);
 
-        caculate_results.setOnClickListener(v ->{
+
+        calculate_results.setOnClickListener(v ->{
             String height = bmi_height.getText().toString();
             String weight = bmi_weight.getText().toString();
 
@@ -45,11 +47,15 @@ public class MainActivity extends AppCompatActivity {
 
             String result = "Your Bmi is " + String.format("%.2f" , bmi) + "\n";
             if(bmi <18.8){
-                result += "you are underwieght";
+                
+                result += "you are underweight";
+            } else if (bmi <17.0) {
+                result+= "you are malnourished";
+                
             } else if (bmi <24.9) {
                 result+= "you have a normal weight";
             } else if (bmi <29.9) {
-                result+= "you are overwieght";
+                result+= "you are overweight";
             }else {
                 result+="you are obese";
             }
@@ -57,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
             results_bmi.setText(result);
 
         });
+
+        erase_button.setOnClickListener(v -> {
+                bmi_height.setText("");
+                bmi_weight.setText("");
+            results_bmi.setText("");
+        });
+
+
+
 
 
 
